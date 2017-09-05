@@ -35,7 +35,7 @@ clean:
 	@rm -rf .Python p-env roles
 
 initialize:
-	@init.sh
+	@init_quick.sh
 
 .PHONY: all clean initialize build run stop
 

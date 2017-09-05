@@ -3,6 +3,8 @@
 
 # Common section for sa- container roles
 
+remote_user: root # supress sudo issues for unprepared roles
+
 container_user: nginx
 container_uid: 1000
 container_init: "dumb-init" # to support phusion at later stages

@@ -1,6 +1,8 @@
 ---
 # tasks file for sa-nginx-container
 
+# todo: add failure, if executed not inside docker container
+
   - include: "tasks_nginx.yml"
 
   - include: "tasks_nginx_docker.yml"
