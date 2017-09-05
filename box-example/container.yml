@@ -3,9 +3,9 @@ settings:
   conductor_base: ubuntu:16.04
 
 services:
-   nginx:
+   www:
      from: ubuntu:16.04
-     container_name: sa-nginx-container
+     container_name: www
      roles:
        - softasap.sa-nginx-container
      volumes:

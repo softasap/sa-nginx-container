@@ -79,6 +79,9 @@
 
   - name: Nginx | Disable default site
     file: path=/etc/nginx/default.conf state=absent
+    with_items:
+      - /etc/nginx/default.conf
+      - /etc/nginx/conf.d/default.conf  
     when:  nginx_present|failed
     tags: 
       - nginx
