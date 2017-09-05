@@ -48,5 +48,13 @@ clean:
 initialize:
 	@init_quick.sh
 
+tag:
+	@docker tag $(ROLE_NAME)-www:latest softasap/sa-container-box-examples:$(ROLE_NAME).$(ROLE_VERSION)
+	@docker tag $(ROLE_NAME)-www:latest softasap/sa-container-box-examples:$(ROLE_NAME).latest
+
+push:
+	@docker push softasap/sa-container-box-examples:$(ROLE_NAME).$(ROLE_VERSION)
+	@docker push softasap/sa-container-box-examples:$(ROLE_NAME).latest
+
 .PHONY: all clean initialize build run stop
 

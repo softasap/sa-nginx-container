@@ -8,6 +8,8 @@ services:
    www:
      from: ubuntu:16.04
      container_name: www
+     expose:
+       - "8000"
      roles:
        - {
            role: "softasap.sa-nginx-container"
