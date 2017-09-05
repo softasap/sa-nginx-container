@@ -8,6 +8,7 @@
       owner: root
       group: root
       mode: 0775
+      validate_certs: False
     when: container_init == "dumb-init"  
 
   - name: Container Setup | Update container user
