@@ -1,0 +1,7 @@
+---
+  - name: Copy fallback default nginx config for demo purposes
+    copy: src="{{role_dir}}/files/conf/demo.conf" dest="/etc/nginx/sites-enabled/demo.conf"
+
+  - copy: src={{ item }} dest=/www/ owner=nginx group=root mode=755
+    with_fileglob:
+      - "/{{role_dir}}/files/www/*"

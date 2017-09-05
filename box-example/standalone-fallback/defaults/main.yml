@@ -1,0 +1,3 @@
+---
+
+  role_dir: "{{ role_path }}"

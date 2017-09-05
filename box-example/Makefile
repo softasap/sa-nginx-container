@@ -1,27 +1,35 @@
 python = python2.7
 SHELL=/bin/bash
-PROJECT_NAME=$(shell cat $(PWD)/.project-name)
+DOCKER_HELPER := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))/docker_helper.sh
+
+ROLE_VERSION=$(shell cat $(PWD)/../version.txt)
+ROLE_NAME=$(shell . $(DOCKER_HELPER) ; getUpDirLevel2)
+
+REGISTRY_HOST=docker.io
+USERNAME=softasap
 
 all: clean_build
 
 clean_build: clean initialize build
 
 build:  p-env/bin/ansible-container build_container
-	@echo p-env/bin/ansible-container --debug --project-name $(PROJECT_NAME) build --roles-path ./roles/ -- -vvv
-	@p-env/bin/ansible-container --debug --project-name $(PROJECT_NAME) build --roles-path ./roles/ -- -vvv
+	@echo p-env/bin/ansible-container --debug --project-name $(ROLE_NAME) build --roles-path ./roles/ -- -vvv
+	@p-env/bin/ansible-container --debug --project-name $(ROLE_NAME) build --roles-path ./roles/ -- -vvv
 	@echo "Application docker image was build"
 
 build_container:
+	@echo Building "$(ROLE_NAME)" version $(ROLE_VERSION)
+	@echo ===============================================
 	@echo Is there way to skip conductor rebuild each time? Submit PR
 
 run:  p-env/bin/ansible-container
-	@echo p-env/bin/ansible-container --debug --project-name $(PROJECT_NAME) run --roles-path ./roles/ -- -vvv
-	@p-env/bin/ansible-container --debug --project-name $(PROJECT_NAME) run --roles-path ./roles/ -- -vvv
+	@echo p-env/bin/ansible-container --debug --project-name $(ROLE_NAME) run --roles-path ./roles/ -- -vvv
+	@p-env/bin/ansible-container --debug --project-name $(ROLE_NAME) run --roles-path ./roles/ -- -vvv
 	@echo "Application environment was started"
 
 stop:   p-env/bin/ansible-container
-	@echo p-env/bin/ansible-container --debug --project-name $(PROJECT_NAME) stop
-	@p-env/bin/ansible-container --debug --project-name $(PROJECT_NAME) stop
+	@echo p-env/bin/ansible-container --debug --project-name $(ROLE_NAME) stop
+	@p-env/bin/ansible-container --debug --project-name $(ROLE_NAME) stop
 	@echo "Application environment was stopped"
 
 p-env/bin/pip: p-env/bin/python

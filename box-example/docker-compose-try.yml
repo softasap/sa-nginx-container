@@ -2,7 +2,7 @@
 version: '2'
 services:
   nginx:
-    image: sa-nginx-container-www:latest
+    image: softasap/sa-container-box-examples:sa-nginx-container.latest
     ports:
     - 8000:8000
     command: ['/usr/bin/dumb-init', 'nginx', '-c', '/etc/nginx/nginx.conf']

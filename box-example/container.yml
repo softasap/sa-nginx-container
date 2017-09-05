@@ -1,12 +1,21 @@
 version: "2"
 settings:
   conductor_base: ubuntu:16.04
+  volumes:
+   - temp-space:/tmp   # Used to copy static content between containers
 
 services:
    www:
      from: ubuntu:16.04
      container_name: www
      roles:
-       - softasap.sa-nginx-container
-     volumes:
-         - "$PWD/app/www:/static"
+       - {
+           role: "softasap.sa-nginx-container"
+         }
+       - {
+           role: "../standalone-fallback"
+         }
+
+volumes:
+  temp-space:
+    docker: {}
