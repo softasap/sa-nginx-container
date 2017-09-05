@@ -21,17 +21,17 @@ nginx_directories:
 
 nginx_conf_properties:
   - {
-      regexp="^daemon *",
-      line="daemon off;",
-      insertbefore="BOF"
+      regexp: "^daemon *",
+      line: "daemon off;",
+      insertbefore: "BOF"
     }
   - {
-      regexp="^worker_processes *",
-      line="worker_processes auto;",
-      insertbefore="BOF"
+      regexp: "^worker_processes *",
+      line: "worker_processes auto;",
+      insertbefore: "BOF"
     }
   - {
-      regexp="^pid *",
-      line="pid {{nginx_pid_dir}}/nginx.pid;",
-      insertbefore="BOF"
+      regexp: "^pid *",
+      line: "pid {{nginx_pid_dir}}/nginx.pid;",
+      insertbefore: "BOF"
     }
