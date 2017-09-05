@@ -18,3 +18,20 @@ nginx_directories:
     - "{{ nginx_pid_dir }}"
     - /var/log/nginx
     - /var/lib/nginx
+
+nginx_conf_properties:
+  - {
+      regexp="^daemon *",
+      line="daemon off;",
+      insertbefore="BOF"
+    }
+  - {
+      regexp="^worker_processes *",
+      line="worker_processes auto;",
+      insertbefore="BOF"
+    }
+  - {
+      regexp="^pid *",
+      line="pid {{nginx_pid_dir}}/nginx.pid;",
+      insertbefore="BOF"
+    }

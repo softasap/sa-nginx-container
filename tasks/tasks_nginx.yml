@@ -92,3 +92,15 @@
     tags: 
       - nginx
 
+  - name: Nginx | Patch basic settings /etc/nginx/nginx.conf
+    lineinfile:
+      dest: /etc/nginx/nginx.conf
+      regexp: "{{item.regexp}}"
+      line: "{{item.line}}"
+      insertbefore: "{{item.insertbefore | default(omit)}}"
+      insertafter: "{{item.insertafter | default(omit)}}"
+      backrefs="{{item.backrefs | default(omit)}}"
+    with_items: "{{nginx_conf_properties | default([])}}"
+    tags:
+     - nginx
+
