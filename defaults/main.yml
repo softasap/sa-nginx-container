@@ -13,6 +13,8 @@ dumb_init_version: "1.2.0"
 nginx_pid_dir: /run/nginx
 nginx_static_dir: /static
 
+nginx_asset_dirs: [] # directories to be copied inside docker container
+
 nginx_directories:
     - "{{ nginx_static_dir }}"
     - "{{ nginx_pid_dir }}"

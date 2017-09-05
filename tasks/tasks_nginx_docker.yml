@@ -9,7 +9,7 @@
       group: root
       mode: 0775
       validate_certs: False
-    when: container_init == "dumb-init"  
+    when: container_init == "dumb-init"
 
   - name: Container Setup | Update container user
     user:
@@ -30,7 +30,7 @@
   - name: Container Setup | Nginx  | Clear log files
     file:
       path: "/var/log/nginx/{{ item }}"
-      state: absent 
+      state: absent
     with_items:
       - access.log
       - error.log
@@ -43,14 +43,14 @@
       - /var/log/nginx
       - /var/lib/nginx
 
-  - name: Container Setup | Nginx  | Make directories writable by root group 
+  - name: Container Setup | Nginx  | Make directories writable by root group
     command: chmod 775 {{ item }}
     with_items:
       - /var
       - /var/log
-      - /var/lib 
+      - /var/lib
 
-  - name: "Container Setup | Nginx  | Make directories writable to {{ container_user }}:root" 
+  - name: "Container Setup | Nginx  | Make directories writable to {{ container_user }}:root"
     command: chmod 775 {{ item }}
     with_items:
       - "{{ nginx_pid_dir }}"
@@ -58,7 +58,7 @@
       - /var/log/nginx
       - /var/lib/nginx
 
-  - name: Container Setup | Nginx  | Link log files to stdout 
+  - name: Container Setup | Nginx  | Link log files to stdout
     command: "ln -sf /dev/stdout /var/log/nginx/{{ item }}"
     with_items:
       - access.log
@@ -77,10 +77,10 @@
       group: root
       mode: 0775
       recurse: yes
-  
+
   - name: Container Setup | Nginx  | Create tmp directories with correct permissions
     file:
-      path: "/var/lib/nginx/{{ item }}" 
+      path: "/var/lib/nginx/{{ item }}"
       state: directory
       owner: "{{ container_user }}"
       group: root
@@ -92,3 +92,29 @@
       - tmp/proxy
       - tmp/scgi
       - tmp/uwsgi
+
+  - name: Container Setup | Nginx | put static assets inside container
+    synchronize:
+      src: "{{ item }}/"
+      dest: "{{ nginx_static_dir }}/"
+      rsync_opts: --checksum
+    with_items: "{{ nginx_asset_dirs }}"
+    remote_user: nginx
+
+  - name: Container Setup | Nginx | Itemize default nginx static assets
+    find:
+      paths: /usr/share/nginx/html
+      recurse: yes
+    when: "nginx_asset_dirs | length == 0"
+    register: default_assets
+
+  - name: Container Setup | Nginx | Copy default content when no static assets
+    copy:
+      src: "{{ item.path }}"
+      dest: "{{ nginx_static_dir }}"
+      remote_src: yes
+      owner: "{{ container_user }}"
+      group: root
+      mode: 0664
+    with_items: "{{ default_assets.files }}"
+    when: "nginx_asset_dirs | length == 0"
