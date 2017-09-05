@@ -1,5 +1,13 @@
-from: 'ubuntu:16.04'
-ports:
-- 8000:8000
-user: 'nginx'
-command: ['/usr/bin/dumb-init', 'nginx', '-c', '/etc/nginx/nginx.conf']
+---
+version: '2'
+services:
+  nginx:
+    image: sa-nginx-container-www:latest
+    ports:
+      - 8000:8000
+    user: nginx
+    command: ['/usr/bin/dumb-init', 'nginx', '-c', '/etc/nginx/nginx.conf']
+    volumes:
+    - "${PWD}/app/conf/demo.conf:/etc/nginx/sites-enabled/demo.conf"
+    - "${PWD}/app/www:/www"
+
