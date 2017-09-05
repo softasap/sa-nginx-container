@@ -1,5 +1,5 @@
 ---
-version: '2'
+version: '3.1'
 services:
   nginx:
     image: sa-nginx-container-www:latest
