@@ -1,0 +1,18 @@
+---
+# defaults file for sa-nginx-container
+
+# Common section for sa- container roles
+
+container_user: nginx
+container_uid: 1000
+container_init: "dumb-init" # to support phusion at later stages
+dumb_init_version: "1.2.0"
+
+nginx_pid_dir: /run/nginx
+nginx_static_dir: /static
+
+nginx_directories:
+    - "{{ nginx_static_dir }}"
+    - "{{ nginx_pid_dir }}"
+    - /var/log/nginx
+    - /var/lib/nginx

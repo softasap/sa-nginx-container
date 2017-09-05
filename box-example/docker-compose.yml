@@ -1,0 +1,9 @@
+---
+version: '2'
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+    - 8080:80
+    volumes:
+    - "${PWD}/app/nginx/site.conf:/etc/nginx/conf.d/default.conf"
