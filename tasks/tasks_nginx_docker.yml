@@ -1,15 +1,24 @@
 ---
   # Portions come from https://github.com/ansible/nginx-container as the source of ideas
 
-  - name: Container Setup | Install dumb init
-    get_url:
-      url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_amd64
-      dest: /usr/bin/dumb-init
-      owner: root
-      group: root
-      mode: 0775
-      validate_certs: False
-    when: container_init == "dumb-init"
+  - block:
+
+    - name: Check /usr/bin/dumb-init exists
+      stat: path="/usr/bin/dumb-init"
+      register: dumb_init_present
+
+
+    - name: Container Setup | Install dumb init
+      get_url:
+        url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_amd64
+        dest: /usr/bin/dumb-init
+        owner: root
+        group: root
+        mode: 0775
+        validate_certs: False
+      when: dumb_init_present.stat.exists == False
+
+    when: container_init == "standalone-dumb-init"
 
   - name: Container Setup | Update container user
     user:

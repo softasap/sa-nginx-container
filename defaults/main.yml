@@ -7,7 +7,7 @@ remote_user: root # supress sudo issues for unprepared roles
 
 container_user: nginx
 container_uid: 1000
-container_init: "dumb-init" # to support phusion at later stages
+container_init: "standalone-dumb-init" # custom, dumb-init, phusion-init if you are based on sa-container-bootstrap
 dumb_init_version: "1.2.0"
 
 nginx_pid_dir: /run/nginx
