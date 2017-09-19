@@ -42,7 +42,11 @@ and which directories need to be rsynced inside container.
 ```
 nginx_static_dir: /static
 
-nginx_asset_dirs: [] # directories to be copied inside docker container
+# directories to be copied inside docker container
+nginx_asset_dirs: []
+
+#directories already mapped inside docker container during build
+nginx_container_asset_dirs: []
 ```
 
 In case if you don't provide your own nginx conf, container will use `sa-nginx`
