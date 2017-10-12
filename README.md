@@ -2,6 +2,14 @@ sa-nginx-container
 ==================
 
 [![Build Status](https://travis-ci.org/softasap/sa-nginx-container.svg?branch=master)](https://travis-ci.org/softasap/sa-nginx-container)
+[![License: MIT][softasap-license-image] ][softasap-license-url]
+[![Ansible-Container friendly][ansible-container-image] ][ansible-container-url]
+
+[ansible-container-image]: https://img.shields.io/badge/ansible--container-ready-brightgreen.svg
+[ansible-container-url]: http://bit.ly/ansible-container
+[softasap-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
+[softasap-license-url]: https://opensource.org/licenses/MIT
+
 
 Helper role to be executed with `ansible-container` aiming to build nginx based service for your application. Role is based on `sa-nginx` role,
 your docker image might be any of ubuntu (14.04 LTS / 16.04 LTS), CentOS 7+, Fedora 25+, Alpine (3.4. 3.5 +)
