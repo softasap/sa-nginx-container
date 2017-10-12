@@ -1,15 +1,24 @@
 ---
   # Portions come from https://github.com/ansible/nginx-container as the source of ideas
 
-  - name: Container Setup | Install dumb init
-    get_url:
-      url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_amd64
-      dest: /usr/bin/dumb-init
-      owner: root
-      group: root
-      mode: 0775
-      validate_certs: False
-    when: container_init == "dumb-init"
+  - block:
+
+    - name: Check /usr/bin/dumb-init exists
+      stat: path="/usr/bin/dumb-init"
+      register: dumb_init_present
+
+
+    - name: Container Setup | Install dumb init
+      get_url:
+        url: https://github.com/Yelp/dumb-init/releases/download/v{{ dumb_init_version }}/dumb-init_{{ dumb_init_version }}_amd64
+        dest: /usr/bin/dumb-init
+        owner: root
+        group: root
+        mode: 0775
+        validate_certs: False
+      when: dumb_init_present.stat.exists == False
+
+    when: container_init == "standalone-dumb-init"
 
   - name: Container Setup | Update container user
     user:
@@ -93,19 +102,33 @@
       - tmp/scgi
       - tmp/uwsgi
 
+  - name: Container Setup | DEBUG | put static assets inside container
+    shell: "ls -la /tmp/"
+    register: "shared_dir"
+
+  - debug: var="shared_dir"
+
   - name: Container Setup | Nginx | put static assets inside container
     synchronize:
       src: "{{ item }}/"
       dest: "{{ nginx_static_dir }}/"
       rsync_opts: --checksum
-    with_items: "{{ nginx_asset_dirs }}"
+    with_items: "{{ nginx_asset_dirs | default([]) }}"
     remote_user: nginx
+
+  - name: Container Setup | Nginx | copy static assets within container
+    shell: "cp -r {{ item }}/ {{ nginx_static_dir }}"
+    # copy:
+    #   src: "{{ item }}/"
+    #   dest: "{{ nginx_static_dir }}/"
+    #   remote_src: yes
+    with_items: "{{ nginx_container_asset_dirs | default([]) }}"
 
   - name: Container Setup | Nginx | Itemize default nginx static assets
     find:
       paths: /usr/share/nginx/html
       recurse: yes
-    when: "nginx_asset_dirs | length == 0"
+    when: "nginx_asset_dirs | length == 0  and  nginx_container_asset_dirs | length == 0"
     register: default_assets
 
   - name: Container Setup | Nginx | Copy default content when no static assets
@@ -117,4 +140,4 @@
       group: root
       mode: 0664
     with_items: "{{ default_assets.files }}"
-    when: "nginx_asset_dirs | length == 0"
+    when: "nginx_asset_dirs | length == 0 and  nginx_container_asset_dirs | length == 0"
