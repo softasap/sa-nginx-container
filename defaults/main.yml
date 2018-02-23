@@ -37,3 +37,6 @@ nginx_conf_properties:
       line: "pid {{nginx_pid_dir}}/nginx.pid;",
       insertbefore: "BOF"
     }
+
+
+nginx_alpine_repo_tag: "@edge"

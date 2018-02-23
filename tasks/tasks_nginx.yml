@@ -11,8 +11,8 @@
 
   - block:
 
-    - name: Nginx | Install (apk)
-      apk: update_cache=yes state=present name=nginx
+    - name: Nginx | Install (apk) from default repos
+      apk: update_cache=yes state=present name="nginx{{nginx_alpine_repo_tag | default('')}}"
       when: nginx_present|failed
       tags: nginx
 
