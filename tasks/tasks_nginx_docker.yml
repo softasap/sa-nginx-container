@@ -26,6 +26,11 @@
       uid: "{{container_uid}}"
       group: root
       createhome: no
+    when: ansible_os_family == "Debian"
+
+  - name: Container Setup | Update container user
+    shell: "deluser {{container_user}} || true && adduser -u {{container_uid}} -G root -H -D {{container_user}}"
+    when: ansible_os_family == "Alpine"
 
   - name: Container Setup | Nginx  | Create directories
     file:
