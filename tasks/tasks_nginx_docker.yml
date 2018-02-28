@@ -28,8 +28,17 @@
       createhome: no
     when: ansible_os_family == "Debian"
 
+  - name: Container Setup | Update container group
+    group: name="{{container_group}}" gid="{{container_gid}}" state="present"
+    when: ansible_os_family == "Debian"
+
+
   - name: Container Setup | Update container user
     shell: "deluser {{container_user}} || true && adduser -u {{container_uid}} -G root -H -D {{container_user}}"
+    when: ansible_os_family == "Alpine"
+
+  - name: "Container Setup | Create nginx group also - addgroup -g {{container_gid}} -S nginx"
+    shell: "addgroup -g {{container_gid}} -S nginx"
     when: ansible_os_family == "Alpine"
 
   - name: Container Setup | Nginx  | Create directories
