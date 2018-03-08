@@ -42,4 +42,4 @@ nginx_conf_properties:
     }
 
 
-nginx_alpine_repo_tag: "@edge"
+nginx_alpine_repo_tag: ""
