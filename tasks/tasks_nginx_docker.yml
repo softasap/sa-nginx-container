@@ -155,3 +155,24 @@
       mode: 0664
     with_items: "{{ default_assets.files }}"
     when: "nginx_asset_dirs | length == 0 and  nginx_container_asset_dirs | length == 0"
+
+  - name: Check if docker image is not provisioned with docker-entrypoint
+    shell: test -e /docker-entrypoint
+    register: docker_entrypoint_set
+    ignore_errors: true
+
+  - name: Template nginx init
+    template: src="{{role_dir}}/templates/docker-entrypoint-fallback.j2" dest="/docker-entrypoint" mode="u=rwx,g=rx,o=rx"
+    when: docker_entrypoint_set | failed
+
+  - name: Template nginx init
+    shell: cat /docker-entrypoint
+    when: docker_entrypoint_set | failed
+
+
+  - name: RUNIT | Creating /etc/service/{{application_service}}
+    file: path="/etc/service/{{application_service}}" state="directory"
+
+  - name: RUNIT | Template  /etc/service/{{application_service}}/run
+    template: src="{{role_dir}}/templates/{{application_service}}.runit.j2" dest="/etc/service/{{application_service}}/run" mode="u=rwx,g=rx,o=rx"
+

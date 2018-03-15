@@ -2,6 +2,9 @@
 # defaults file for sa-nginx-container
 
 # Common section for sa- container roles
+role_dir: "{{role_path}}"
+
+application_service: nginx
 
 remote_user: root # supress sudo issues for unprepared roles
 
