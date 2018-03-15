@@ -15,6 +15,8 @@ container_gid: "{{container_uid}}"
 container_init: "standalone-dumb-init" # custom, dumb-init, phusion-init if you are based on sa-container-bootstrap
 dumb_init_version: "1.2.0"
 
+nginx_default_site: none # spa default static
+
 nginx_pid_dir: /run/nginx
 nginx_static_dir: /static
 

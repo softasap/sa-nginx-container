@@ -115,6 +115,7 @@
       - tmp/proxy
       - tmp/scgi
       - tmp/uwsgi
+    ignore_errors: true  #some might be links already
 
   - name: Container Setup | DEBUG | put static assets inside container
     shell: "ls -la /tmp/"
@@ -175,4 +176,8 @@
 
   - name: RUNIT | Template  /etc/service/{{application_service}}/run
     template: src="{{role_dir}}/templates/{{application_service}}.runit.j2" dest="/etc/service/{{application_service}}/run" mode="u=rwx,g=rx,o=rx"
+
+  - name: Copy fallback default nginx config
+    copy: src="{{role_dir}}/files/conf/{{nginx_default_site}}.conf" dest="/etc/nginx/sites-enabled/default.conf"
+    when: nginx_asset_dirs | count > 0 or nginx_container_asset_dirs | count >0
 
