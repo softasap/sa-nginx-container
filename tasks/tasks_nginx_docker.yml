@@ -181,3 +181,25 @@
     copy: src="{{role_dir}}/files/conf/{{nginx_default_site}}.conf" dest="/etc/nginx/sites-enabled/default.conf"
     when: nginx_asset_dirs | count > 0 or nginx_container_asset_dirs | count >0
 
+  - block:
+
+      - name: Install openssl
+        shell: apk add openssl   
+    
+    when: ansible_os_family == "Alpine"
+
+  - block:
+
+      - name: Install openssl
+        apt: pkg="openssl" state="present"
+
+    when: ansible_os_family == "Alpine"
+
+  - name: Template  SSL generator
+    template: src="{{role_dir}}/templates/generate_crt.sh.j2" dest="/generate_crt.sh" mode="u=rwx,g=rx,o=rx"
+
+  - name: Generate certs
+    shell: "/generate_crt.sh"
+
+  - name: Copy dhparam
+    copy: src="{{role_dir}}/files/dhparam.pem" target="/etc/nginx/dhparam.pem" mode="u=rwx,g=rx,o=rx"
