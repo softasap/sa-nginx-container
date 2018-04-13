@@ -193,13 +193,13 @@
       - name: Install openssl
         apt: pkg="openssl" state="present"
 
-    when: ansible_os_family == "Alpine"
+    when: ansible_os_family == "Debian"
 
   - name: Template  SSL generator
-    template: src="{{role_dir}}/templates/generate_crt.sh.j2" dest="/generate_crt.sh" mode="u=rwx,g=rx,o=rx"
+    template: src="{{role_dir}}/templates/generate_cert.sh.j2" dest="/generate_cert.sh" mode="u=rwx,g=rx,o=rx"
 
   - name: Generate certs
-    shell: "/generate_crt.sh"
+    shell: "/generate_cert.sh"
 
   - name: Copy dhparam
-    copy: src="{{role_dir}}/files/dhparam.pem" target="/etc/nginx/dhparam.pem" mode="u=rwx,g=rx,o=rx"
+    copy: src="{{role_dir}}/files/dhparam.pem" dest="/etc/nginx/dhparam.pem" mode="u=rwx,g=rx,o=rx"
