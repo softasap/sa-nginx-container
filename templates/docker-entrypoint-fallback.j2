@@ -3,7 +3,7 @@
 ##
 ##  --main_command              The main command to run. (default: runit)
 ##
-##  --skip-startup-files        Skip running {{container_init_directory}}/* and /etc/rc.local
+##  --skip-startup-files        Skip running {{container_init_directory | default('/etc/my_init.d')}}/* and /etc/rc.local
 ##
 ##  --skip-runit                Do not run runit services
 
