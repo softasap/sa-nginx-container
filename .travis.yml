@@ -6,7 +6,7 @@ sudo: required
 
 env:
   - container=ubuntu-xenial
-    role_name=sa-nginx-container
+    role_name=softasap.sa-nginx-container
 
 
 # whitelist
