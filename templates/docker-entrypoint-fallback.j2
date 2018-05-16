@@ -1,4 +1,4 @@
-#!{{bin_dir}}/dumb-init /bin/sh
+#!{{bin_dir | default('/usr/bin')}}/dumb-init /bin/sh
 
 ##
 ##  --main_command              The main command to run. (default: runit)
