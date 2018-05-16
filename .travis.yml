@@ -4,6 +4,11 @@ python: "2.7"
 
 sudo: required
 
+env:
+  - container=ubuntu-xenial
+    role_name=sa-nginx-container
+
+
 # whitelist
 branches:
   only:
@@ -29,13 +34,18 @@ install:
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
-  - printf '[defaults]\nroles_path=../:roles' >box/examples/ansible.cfg
 
 script:
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
   - cd box-example/
-  - make clean_build
+  - make initialize
+  - cd roles/${role_name}
+  - git checkout $BRANCH
+  - cd ../../
+  - make build
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
