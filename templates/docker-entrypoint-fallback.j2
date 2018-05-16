@@ -9,7 +9,7 @@
 
 
 # echo "Running any available init scripts:"
-# find {{container_init_directory}} -name "*.sh" -print0 | while read -d $'\0' file
+# find {{container_init_directory | default('/etc/my_init.d')}} -name "*.sh" -print0 | while read -d $'\0' file
 # do
 #   echo " -- Running $file..."
 #   chmod +x $file
